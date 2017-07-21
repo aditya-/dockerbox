@@ -2,15 +2,20 @@
 
 A lightweight [Redis][redis] [Docker image][docker_project] built from source atop [Alpine Linux][alpine_linux]. Available on [GitHub][github_project].
 
-docker rm sap1
+## Docker commands for Testing
+docker run -d --name redis-server -p 6379:6379 sickp/alpine-redis
+`docker rm sap1
 docker rmi $(docker images -q)
 docker build -t aditya/sap1 .
+docker run -d  -p 80:80 --name sap1 aditya/sap1   
 docker run -d  -p 8080:8080 --name sap1 aditya/sap1 
 docker run -ti -p 80:80 --name sap1 aditya/sap1
-docker run -d  -p 80:80 --name sap1 aditya/sap1 
 docker exec -it sap1 bash
 docker run -d --name redis-server -p 6379:6379 sickp/alpine-redis
- docker exec -it b7ca7ac73d83 /bin/sh
+docker exec -it b7ca7ac73d83 /bin/sh
+docker ps -a
+docker logs 0dd79b532a63`
+
 ### Stable 4.0.x Tags
 
 ##### `4.0.0`, `4.0`, `4`, `stable`, `latest`
