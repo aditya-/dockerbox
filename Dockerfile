@@ -28,7 +28,7 @@ RUN set -exo pipefail \
   && adduser -D redis \
   && apk del .build-deps \
   && rm -rf /tmp/*
-ENV REDIS_URL=127.0.0.1:6379
+ENV REDIS_URL=redis://localhost:6379
 RUN apk update && apk add wget ca-certificates && \
  cd /sbin && wget https://s3.amazonaws.com/ml-sreracha/sreracha
 RUN adduser -S -H -s /bin/sh www
