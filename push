@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+repo="sickp/alpine-redis"
+
+def error(message)
+  puts message
+  puts "Usage: #{__FILE__} {major}.{minor}.{patch} [tag]... ]"
+  exit 1
+end
+
+def execute(cmd)
+  puts "=> #{cmd}"
+  system(cmd) || abort
+end
+
+version, *tags = ARGV
+case version
+when /\A4\.0\.\d+\z/
+  possible_tags = %w(4.0 4 stable latest)
+when /\A3\.2\.\d+\z/
+  possible_tags = %w(3.2 3)
+when /\A3\.0\.\d+\z/
+  possible_tags = %w(3.0 old)
+else
+  error("Unknown version: #{version}")
+end
+
+dockerfile = File.join(File.dirname(__FILE__), 'versions', version, 'Dockerfile')
+error("Missing Dockerfile #{dockerfile}") unless File.file?(dockerfile)
+
+puts "Possible tags: #{possible_tags.join(', ')}"
+
+error('Must provide at least one tag.') if tags.empty?
+puts "Given tags: #{tags.join(', ')}"
+
+bad_tags = tags - possible_tags
+error("Illegal tag(s): #{bad_tags.join(', ')}") unless bad_tags.empty?
+
+puts "==== Pushing #{repo}:#{version} ===="
+execute("docker image push #{repo}:#{version}")
+
+tags.each do |tag|
+  puts "==== Tagging #{repo}:#{tag} ===="
+  execute("docker image tag #{repo}:#{version} #{repo}:#{tag}")
+  execute("docker image push #{repo}:#{tag}")
+  execute("docker image rm #{repo}:#{tag}")
+end
