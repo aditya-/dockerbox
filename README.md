@@ -5,6 +5,7 @@ A lightweight [Redis][redis] [Docker image][docker_project] built from source at
 docker rm sap1
 docker rmi $(docker images -q)
 docker build -t aditya/sap1 .
+docker run -d  -p 8080:8080 --name sap1 aditya/sap1 
 docker run -ti -p 80:80 --name sap1 aditya/sap1
 docker run -d  -p 80:80 --name sap1 aditya/sap1 
 docker exec -it sap1 bash
